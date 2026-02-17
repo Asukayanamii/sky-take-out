@@ -85,5 +85,14 @@ public class EmployeeController {
         PageResult pageResult= employeeService.page(employeePageQuery);
         return Result.success(pageResult);
     }
+    /**
+     * 启用禁用员工账号
+     */
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@PathVariable Integer status, Long id) {
+        log.info("员工状态：{}，员工id：{}", status, id);
+        employeeService.startOrStop(status, id);
+        return Result.success();
+    }
 
 }
