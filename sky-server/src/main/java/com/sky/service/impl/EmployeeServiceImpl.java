@@ -74,10 +74,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         emp.setSex(employee.getSex());
         emp.setIdNumber(employee.getIdNumber());
         emp.setStatus(StatusConstant.ENABLE);
-        emp.setCreateTime(LocalDateTime.now());
-        emp.setUpdateTime(LocalDateTime.now());
-        emp.setCreateUser(BaseContext.getCurrentId());
-        emp.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.insert(emp);
 
     }
@@ -102,8 +98,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = Employee.builder()
                 .status(status)
                 .id(id)
-                .updateTime(LocalDateTime.now())
-                .updateUser(BaseContext.getCurrentId())
                 .build();
                 employeeMapper.update(employee);
 
@@ -124,8 +118,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .phone(employee.getPhone())
                 .sex(employee.getSex())
                 .idNumber(employee.getIdNumber())
-                .updateTime(LocalDateTime.now())
-                .updateUser(BaseContext.getCurrentId())
                 .build();
         employeeMapper.update(emp);
     }
