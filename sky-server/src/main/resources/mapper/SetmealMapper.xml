@@ -39,6 +39,9 @@
 
         </set>
     </update>
+    <update id="updateStatus">
+        update setmeal set status = #{status} where id = #{id}
+    </update>
     <delete id="deleteBatch">
         delete from setmeal where id in
                             <foreach collection="list" item="id" separator="," open="(" close=")">
