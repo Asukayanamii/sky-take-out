@@ -9,4 +9,13 @@
             #{id}
         </foreach>
     </delete>
+    <select id="getByDishId" resultType="com.sky.entity.DishFlavor">
+        select * from dish_flavor where dish_id = #{dishId}
+    </select>
+    <insert id="insertBatch">
+        insert into dish_flavor (dish_id,name,value) values
+        <foreach collection="list" item="dishFlavor" separator=",">
+            (#{dishFlavor.dishId},#{dishFlavor.name},#{dishFlavor.value})
+        </foreach>
+    </insert>
 </mapper>

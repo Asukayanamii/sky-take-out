@@ -26,8 +26,6 @@ public interface DishMapper {
     @AutoFill(value = OperationType.INSERT)
     Long insert(Dish dish);
 
-    void insertBatch(List<DishFlavor> flavors);
-
     Page<DishVO> page(DishPageQueryDTO dishPageQueryDTO);
 
     @Select("select * from dish where id = #{id}")
@@ -35,4 +33,6 @@ public interface DishMapper {
 
     void deleteBatch(List<Long> ids);
 
+    @AutoFill(value = OperationType.UPDATE)
+    void update(Dish dish);
 }

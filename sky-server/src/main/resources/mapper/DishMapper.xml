@@ -7,12 +7,9 @@
         insert into dish (name,category_id,price,image,description,status,create_time,update_time,create_user,update_user)
         values (#{name},#{categoryId},#{price},#{image},#{description},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})
     </insert>
-    <insert id="insertBatch">
-        insert into dish_flavor (dish_id,name,value) values
-        <foreach collection="list" item="dishFlavor" separator=",">
-            (#{dishFlavor.dishId},#{dishFlavor.name},#{dishFlavor.value})
-        </foreach>
-    </insert>
+    <update id="update">
+        update dish set name = #{name},category_id = #{categoryId},price = #{price},image = #{image},description = #{description},status = #{status},update_time = #{updateTime},update_user = #{updateUser} where id = #{id}
+    </update>
     <delete id="deleteBatch">
          delete from dish where id in
         <foreach collection="list" item="id" separator="," open="(" close=")">
