@@ -17,7 +17,7 @@ public class SetmealController {
     @Autowired
     private SetmealService setmealService;
 
-    @PostMapping
+    @PutMapping
     public Result save(@RequestBody SetmealDTO setmealDTO)
     {
         log.info("新增套餐");

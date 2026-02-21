@@ -56,6 +56,15 @@ public class DishController {
         dishService.updateWithFlavor(dishDTO);
         return Result.success();
     }
+    @GetMapping("/list")
+    public Result<List<Dish>> getByCategoryId(Long categoryId)
+    {
+        log.info("通过酚类id查询菜品，id:{}",categoryId);
+        List<Dish> list = dishService.getByCategoryId(categoryId);
+        return Result.success(list);
+    }
+
+
 
 
 
