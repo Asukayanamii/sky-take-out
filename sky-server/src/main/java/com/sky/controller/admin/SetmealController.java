@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Slf4j
 @RequestMapping("/admin/setmeal")
@@ -30,6 +32,13 @@ public class SetmealController {
         log.info("分页查询");
         PageResult pageResult = setmealService.page(setmealPageQueryDTO);
         return Result.success(pageResult);
+    }
+    @DeleteMapping
+    public Result delete(@RequestParam List<Long> ids)
+    {
+        log.info("批量删除");
+        setmealService.deleteBatchByIds(ids);
+        return Result.success();
     }
 
 }

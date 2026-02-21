@@ -29,4 +29,6 @@ public interface SetmealMapper {
     Long insert(Setmeal setmeal);
 
     Page<SetmealVO> page(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    void deleteBatch(List<Long> ids);
 }

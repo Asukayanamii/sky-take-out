@@ -6,6 +6,12 @@
         insert into setmeal(name,category_id,price,status,create_time,update_time,create_user,update_user)
         values(#{name},#{categoryId},#{price},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})
     </insert>
+    <delete id="deleteBatch">
+        delete from setmeal where id in
+                            <foreach collection="list" item="id" separator="," open="(" close=")">
+                                #{id}
+                            </foreach>
+    </delete>
     <select id="getIdsByDishIds" resultType="java.lang.Long">
         select * from setmeal_dish where dish_id in
                                    <foreach collection="list" item="dishId" separator="," open="(" close=")">

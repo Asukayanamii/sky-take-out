@@ -49,4 +49,9 @@ public class SetmealServiceImpl implements SetmealService {
         Page<SetmealVO> page = setmealMapper.page(setmealPageQueryDTO);
         return new PageResult(page.getTotal(),page.getResult());
     }
+
+    @Override
+    public void deleteBatchByIds(List<Long> ids) {
+        setmealMapper.deleteBatch(ids);
+    }
 }
