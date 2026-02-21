@@ -12,4 +12,17 @@
                                        #{dishId}
                                    </foreach>
     </select>
+    <select id="page" resultType="com.sky.vo.SetmealVO">
+        select * from setmeal <where>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+    </where>
+    </select>
 </mapper>
