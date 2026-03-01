@@ -16,10 +16,7 @@ import com.sky.mapper.*;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.utils.WeChatPayUtil;
-import com.sky.vo.AdminOrderPageQueryVO;
-import com.sky.vo.OrderPaymentVO;
-import com.sky.vo.OrderQueryVO;
-import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -235,6 +232,12 @@ public class OrderServiceImpl implements OrderService {
             adminOrderPageQueryVO.setOrderDishes(orderDetailList.toString());
         }
         return new PageResult(pageInfo.getTotal(),list);
+    }
+
+    @Override
+    public OrderStatisticsVO statistics() {
+        OrderStatisticsVO orderStatisticsVO = orderMapper.statistics();
+        return orderStatisticsVO;
     }
 
 }
