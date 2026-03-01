@@ -23,4 +23,7 @@ public interface OrderMapper {
     void update(Orders orders);
 
     Page<Orders> pageQuery4User(Integer status, Long userId);
+
+    @Select("select * from orders where id = #{id}")
+    Orders getById(Long id);
 }

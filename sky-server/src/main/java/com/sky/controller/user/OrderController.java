@@ -5,13 +5,14 @@ import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
+import com.sky.vo.OrderQueryVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController("userOrderController")
 @Slf4j
@@ -46,6 +47,12 @@ public class OrderController {
         log.info("查询历史订单：page={}, pageSize={}, status={}", page, pageSize, status);
         PageResult pageResult = orderService.pageQuery4User(page, pageSize, status);
         return Result.success(pageResult);
+    }
+    @GetMapping("/orderDetail/{id}")
+    public Result<OrderQueryVO> orderDetail(@PathVariable Long id){
+        log.info("查询订单详情，订单id：{}", id);
+        OrderQueryVO orderDetail = orderService.orderDetailById(id);
+        return Result.success(orderDetail);
     }
 
 }

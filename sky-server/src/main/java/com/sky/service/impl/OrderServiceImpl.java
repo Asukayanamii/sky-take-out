@@ -66,6 +66,7 @@ public class OrderServiceImpl implements OrderService {
         orders.setPhone(adb.getPhone());
         orders.setConsignee(adb.getConsignee());
         orders.setUserId(userId);
+        orders.setAddress(adb.getDetail());
 
 
         orderMapper.insert(orders);
@@ -162,6 +163,20 @@ public class OrderServiceImpl implements OrderService {
         }
         //封装并返回分页数据
         return new PageResult(pageInfo.getTotal(),list);
+
+    }
+
+    @Override
+    public OrderQueryVO orderDetailById(Long id) {
+        OrderQueryVO orderQueryVO = new OrderQueryVO();
+        //根据id查询订单
+        Orders orders = orderMapper.getById(id);
+        //根据订单id查询订单详细
+        List<OrderDetail> orderDetailList = orderDetailMapper.list(id);
+        //封装VO
+        orderQueryVO.setOrderDetailList(orderDetailList);
+        BeanUtils.copyProperties(orders,orderQueryVO);
+        return orderQueryVO;
 
     }
 
