@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,6 +186,33 @@ public class OrderServiceImpl implements OrderService {
         //将订单状态设为已取消
         Orders orders = Orders.builder().status(Orders.CANCELLED).id(id).build();
         orderMapper.update(orders);
+    }
+
+    @Override
+    @Transactional
+    public void repetition(Long id) {
+        //根据订单id查询订单数据
+        Orders orders = orderMapper.getById(id);
+        if (orders == null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        //根据订单id查询订单详细数据
+        List<OrderDetail> orderDetailList = orderDetailMapper.list(id);
+        //提交新的订单数据
+        orders.setId(null);
+        orders.setNumber(String.valueOf(System.currentTimeMillis()));
+        orders.setStatus(Orders.PENDING_PAYMENT);
+        orders.setPayStatus(Orders.UN_PAID);
+        orders.setOrderTime(LocalDateTime.now());
+        orders.setDeliveryStatus(0);
+        orders.setEstimatedDeliveryTime(LocalDateTime.now().plus(60, ChronoUnit.MINUTES));
+        orderMapper.insert(orders);
+        //提交订单详细数据
+        for (OrderDetail orderDetail : orderDetailList) {
+            orderDetail.setId(null);
+            orderDetail.setOrderId(orders.getId());
+        }
+        orderDetailMapper.insertBatch(orderDetailList);
     }
 
 }

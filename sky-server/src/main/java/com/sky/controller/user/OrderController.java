@@ -7,7 +7,6 @@ import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderQueryVO;
 import com.sky.vo.OrderSubmitVO;
-import com.sky.vo.OrderVO;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +57,12 @@ public class OrderController {
     public Result cancel(@PathVariable Long id){
         log.info("用户取消订单，订单id：{}", id);
         orderService.cancel(id);
+        return Result.success();
+    }
+    @PostMapping("/repetition/{id}")
+    public Result repetition(@PathVariable Long id){
+        log.info("用户再来一单，订单id：{}", id);
+        orderService.repetition(id);
         return Result.success();
     }
 
