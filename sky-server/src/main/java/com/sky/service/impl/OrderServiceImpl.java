@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.*;
@@ -15,11 +16,13 @@ import com.sky.mapper.*;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.utils.WeChatPayUtil;
+import com.sky.vo.AdminOrderPageQueryVO;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderQueryVO;
 import com.sky.vo.OrderSubmitVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -213,6 +216,25 @@ public class OrderServiceImpl implements OrderService {
             orderDetail.setOrderId(orders.getId());
         }
         orderDetailMapper.insertBatch(orderDetailList);
+    }
+
+    @Override
+    public PageResult pageSearch(OrdersPageQueryDTO ordersPageQuery) {
+        //分页查询订单数据
+        PageHelper.startPage(ordersPageQuery.getPage(),ordersPageQuery.getPageSize());
+        Page<Orders> pageInfo = orderMapper.pageSearch(ordersPageQuery);
+        List<AdminOrderPageQueryVO> list = new ArrayList<>();
+        for (Orders orders : pageInfo) {
+            AdminOrderPageQueryVO adminOrderPageQueryVO = new AdminOrderPageQueryVO();
+            BeanUtils.copyProperties(orders,adminOrderPageQueryVO);
+            list.add(adminOrderPageQueryVO);
+        }
+        //获取订单详细数据
+        for (AdminOrderPageQueryVO adminOrderPageQueryVO : list) {
+            List<OrderDetail> orderDetailList = orderDetailMapper.list(adminOrderPageQueryVO.getId());
+            adminOrderPageQueryVO.setOrderDishes(orderDetailList.toString());
+        }
+        return new PageResult(pageInfo.getTotal(),list);
     }
 
 }
