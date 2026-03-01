@@ -1,6 +1,8 @@
 package com.sky.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.OrdersPaymentDTO;
@@ -10,9 +12,11 @@ import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.OrderBusinessException;
 import com.sky.exception.ShoppingCartBusinessException;
 import com.sky.mapper.*;
+import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
+import com.sky.vo.OrderQueryVO;
 import com.sky.vo.OrderSubmitVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,6 +140,29 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders);
+    }
+
+    @Override
+    public PageResult pageQuery4User(Integer page, Integer pageSize, Integer status) {
+        List<OrderQueryVO> list = new ArrayList<>();
+        //根据状态和用户id查询订单数据
+        Long userId = BaseContext.getCurrentId();
+        PageHelper.startPage(page,pageSize);
+        Page<Orders> pageInfo = orderMapper.pageQuery4User(status,userId);
+        List<Orders> orders = pageInfo.getResult();
+        for (Orders orders1 : orders){
+            OrderQueryVO orderQueryVO = new OrderQueryVO();
+            BeanUtils.copyProperties(orders1,orderQueryVO);
+            list.add(orderQueryVO);
+        }
+        //根据订单查询详细订单数据
+        for (OrderQueryVO orderQueryVO : list) {
+            List<OrderDetail> orderDetailList = orderDetailMapper.list(orderQueryVO.getId());
+            orderQueryVO.setOrderDetailList(orderDetailList);
+        }
+        //封装并返回分页数据
+        return new PageResult(pageInfo.getTotal(),list);
+
     }
 
 }
