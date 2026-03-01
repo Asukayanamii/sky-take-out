@@ -27,4 +27,6 @@ public interface OrderService {
     PageResult pageQuery4User(Integer page, Integer pageSize, Integer status);
 
     OrderQueryVO orderDetailById(Long id);
+
+    void cancel(Long id);
 }

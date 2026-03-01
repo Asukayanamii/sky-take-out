@@ -180,4 +180,11 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    @Override
+    public void cancel(Long id) {
+        //将订单状态设为已取消
+        Orders orders = Orders.builder().status(Orders.CANCELLED).id(id).build();
+        orderMapper.update(orders);
+    }
+
 }
