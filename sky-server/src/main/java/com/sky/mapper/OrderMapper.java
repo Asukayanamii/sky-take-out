@@ -37,6 +37,6 @@ public interface OrderMapper {
 
     OrderStatisticsVO statistics();
 
-    @Select("select * from orders where status = #{status} and order_time < #{time}")
+    @Select("select * from orders where status = #{pendingPayment} and order_time < #{time}")
     List<Orders> getByStatusAndOrderTime(Integer pendingPayment, LocalDateTime time);
 }
