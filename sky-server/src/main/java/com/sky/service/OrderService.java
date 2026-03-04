@@ -37,4 +37,6 @@ public interface OrderService {
     PageResult pageSearch(OrdersPageQueryDTO ordersPageQuery);
 
     OrderStatisticsVO statistics();
+
+    void confirm(Long id);
 }

@@ -44,6 +44,8 @@ public class OrderServiceImpl implements OrderService {
     private WeChatPayUtil weChatPayUtil;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private OrderService orderService;
 
     @Override
     @Transactional
@@ -240,6 +242,16 @@ public class OrderServiceImpl implements OrderService {
     public OrderStatisticsVO statistics() {
         OrderStatisticsVO orderStatisticsVO = orderMapper.statistics();
         return orderStatisticsVO;
+    }
+
+    @Override
+    public void confirm(Long id) {
+        Orders orders = orderMapper.getById(id);
+        if (orders == null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        orders.setStatus(Orders.CONFIRMED);
+        orderMapper.update(orders);
     }
 
 }
