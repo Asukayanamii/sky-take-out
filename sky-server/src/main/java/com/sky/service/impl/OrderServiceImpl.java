@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -229,7 +230,8 @@ public class OrderServiceImpl implements OrderService {
         //获取订单详细数据
         for (AdminOrderPageQueryVO adminOrderPageQueryVO : list) {
             List<OrderDetail> orderDetailList = orderDetailMapper.list(adminOrderPageQueryVO.getId());
-            adminOrderPageQueryVO.setOrderDishes(orderDetailList.toString());
+            String orderDishes = orderDetailList.stream().map(orderDetail -> orderDetail.getName() + "*" + orderDetail.getNumber()).collect(Collectors.joining(","));
+            adminOrderPageQueryVO.setOrderDishes(orderDishes);
         }
         return new PageResult(pageInfo.getTotal(),list);
     }

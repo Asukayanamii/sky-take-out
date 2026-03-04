@@ -4,12 +4,18 @@ import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
+import com.sky.vo.AdminOrderDetailVO;
+import com.sky.vo.OrderQueryVO;
 import com.sky.vo.OrderStatisticsVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.stream.Collectors;
 
 @RestController("adminOrderController")
 @RequestMapping("/admin/order")
@@ -28,5 +34,16 @@ public class OrderController {
         log.info("统计订单数据");
         OrderStatisticsVO orderStatisticsVO = orderService.statistics();
         return Result.success();
+    }
+    @GetMapping("/details/{id}")
+    public Result<AdminOrderDetailVO> details(@PathVariable Long id) {
+        log.info("查询订单详情：{}",id);
+        OrderQueryVO orderQueryVO = orderService.orderDetailById(id);
+        AdminOrderDetailVO adminOrderDetailVO = new AdminOrderDetailVO();
+        BeanUtils.copyProperties(orderQueryVO,adminOrderDetailVO);
+        String orderDishes = orderQueryVO.getOrderDetailList().stream().map(dish -> dish.getName() + "*" +
+                dish.getNumber()).collect(Collectors.joining( ","));
+        adminOrderDetailVO.setOrderDishes(orderDishes);
+        return Result.success(adminOrderDetailVO);
     }
 }
