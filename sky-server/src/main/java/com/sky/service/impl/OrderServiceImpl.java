@@ -308,4 +308,18 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.update(orders);
     }
 
+    @Override
+    public void reminder(Long id) {
+        Orders orders = orderMapper.getById(id);
+        if (orders == null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("type",2);//1表示来单提醒，2表示订单催单
+        map.put("orderId",orders.getId());
+        map.put("content","订单号："+orders.getNumber());
+        //通过WebSocketServer发送消息给客户端
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
+    }
+
 }
