@@ -82,4 +82,21 @@
         </if>
         </where>;
     </select>
+    <select id="getSaleTop" resultType="com.sky.dto.GoodsSalesDTO">
+        select
+        od.name,
+        sum(od.number) as number
+        from orders o
+        left join order_detail od on o.id = od.order_id
+        where o.status = 5
+        <if test="begin != null">
+            and o.order_time >= #{begin}
+        </if>
+        <if test="end != null">
+            and o.order_time &lt;= #{end}
+        </if>
+        group by od.name
+        order by number desc
+        limit 0,10
+    </select>
 </mapper>
