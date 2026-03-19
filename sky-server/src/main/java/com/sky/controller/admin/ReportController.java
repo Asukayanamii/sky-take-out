@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 
 @RestController
@@ -39,5 +41,10 @@ public class ReportController {
         log.info("top10商品统计{},{}", begin, end);
         return Result.success(reportService.getTop10(begin, end));
 
+    }
+    @GetMapping("/export")
+    public void export(HttpServletResponse response) {
+        log.info("导出数据");
+        reportService.exportBusinessData(response);
     }
 }
